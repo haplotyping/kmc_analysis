@@ -1,0 +1,8 @@
+bin
+.project
+.cproject
+.settings/
+query/**/*.d
+query/**/*.o
+analysis/**/*.d
+analysis/**/*.o
