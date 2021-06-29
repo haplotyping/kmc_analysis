@@ -2,6 +2,10 @@
 
 extern "C" {
 
+	int main(int argc, char** argv) {
+		return 0;
+	}
+
 	bool status(const char *location, uint64_t *status) {
 		KMC_Db *kmc_db = new KMC_Db(location);
 		if (kmc_db->initialised) {
@@ -64,7 +68,7 @@ extern "C" {
 			stats[1]=0;//positive
 			stats[2]=0;//minimum
 			stats[3]=0;//maximum
-			for (int i = 0; i < n; i++) {
+			for (uint i = 0; i < n; i++) {
 				kmer = kmer_list[i];
 				if (!std::regex_match(kmer, std::regex("^[ACGT]+$"))) {
 					return false;
@@ -78,7 +82,7 @@ extern "C" {
 			kmc_db->search(kmers, result);
 			uint32_t f;
 			stats[0]=kmers.size();
-			for (int i = 0; i < kmers.size(); i++) {
+			for (uint i = 0; i < kmers.size(); i++) {
 				f = result[kmers[i]];
 				frequencies[i] = f;
 				if (f>0) {
@@ -127,7 +131,7 @@ extern "C" {
 			status[18] = kmc_db->suffix_record_size;
 			status[19] = kmc_db->suffixes_position;
 			status[20] = kmc_db->suffixes_size;
-			for (int i = 0; i < n; i++) {
+			for (uint i = 0; i < n; i++) {
 				kmer = kmer_list[i];
 				if (!std::regex_match(kmer, std::regex("^[ACGT]+$"))) {
 					return false;
@@ -153,7 +157,7 @@ extern "C" {
 			stats[0]=kmers.size();
 			std::ofstream myfile;
 			myfile.open (output);
-			for (int i = 0; i < kmers.size(); i++) {
+			for (uint i = 0; i < kmers.size(); i++) {
 				f = result[kmers[i]];
 				if (f>0) {
 					myfile << kmc_db -> kmc_kmer.kmer2string(kmers[i]);

@@ -3,6 +3,7 @@ lib
 .project
 .cproject
 .settings/
+**/.gitignore
 query/**/*.d
 query/**/*.o
 analysis/**/*.d
