@@ -119,3 +119,61 @@ And optional parameters:
  -max <value>: exclude k-mers occurring more than <value> times (default 255)
  -rc: include reverse complements
 ```
+
+## Python
+
+Query KMC database from Python
+
+### Query for k-mers
+
+```python
+import ctypes
+
+library = "kmc_python.so"
+filename = "kmer.kmc"
+kmers = ["AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT"]
+
+n=len(kmers)
+kmers_bytes = [bytes(kmer, "utf-8") for kmer in kmers]
+kmers_array = (ctypes.c_char_p * (n+1))()
+kmers_array[:-1] = kmers_bytes
+stats = (ctypes.c_uint32*4)()
+status = (ctypes.c_uint64*21)()
+frequencies = (ctypes.c_uint32*n)()
+            
+lib = ctypes.cdll.LoadLibrary(library)
+lib.kmer_frequencies(bytes(filename, "utf-8"),kmers_array,n,
+                     frequencies,stats,status)    
+for i in range(n):
+    print(kmers[i]+"\t"+str(frequencies[i]))
+```
+
+### Mismatches
+
+```python
+import ctypes, tempfile
+
+library = "kmc_python.so"
+filename = "kmer.kmc"
+kmers = ["AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT"]
+mm = 1
+
+n=len(kmers)
+kmers_bytes = [bytes(kmer, "utf-8") for kmer in kmers]
+kmers_array = (ctypes.c_char_p * (n+1))()
+kmers_array[:-1] = kmers_bytes
+stats = (ctypes.c_uint32*4)()
+status = (ctypes.c_uint64*21)()
+
+try:
+    output = tempfile.NamedTemporaryFile()                
+    lib = ctypes.cdll.LoadLibrary(library)
+    lib.kmer_frequencies_mm(bytes(filename, "utf-8"),kmers_array,n,mm,bytes(output.name, "utf-8"),
+                            stats,status)
+    result = [item.decode("ascii").strip().split("\t") for item in output.readlines()]
+    for item in result:
+        print(str(item[0])+"\t"+str(item[1]))
+finally:
+    output.close()
+```
+
