@@ -27,6 +27,8 @@ private:
 
 public:
 
+	bool initialised;
+
 	uint64 size_pre;
 	uint64 size_suf;
 

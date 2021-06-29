@@ -8,7 +8,6 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include test/subdir.mk
 -include src/classes/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
@@ -43,27 +42,27 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := kmc_analysis
-BUILD_ARTIFACT_EXTENSION :=
-BUILD_ARTIFACT_PREFIX := ../bin/
+BUILD_ARTIFACT_NAME := kmc_python
+BUILD_ARTIFACT_EXTENSION := dylib
+BUILD_ARTIFACT_PREFIX := ../lib/
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: ../bin/kmc_analysis
+all: ../lib/kmc_python.dylib
 
 # Tool invocations
-../bin/kmc_analysis: $(OBJS) $(USER_OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
+../lib/kmc_python.dylib: $(OBJS) $(USER_OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MacOS X C++ Linker'
-	g++  -o "../bin/kmc_analysis" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -dynamiclib -o "../lib/kmc_python.dylib" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(CPP_DEPS)$(C_DEPS) ../bin/kmc_analysis
+	-$(RM) $(LIBRARIES)$(CC_DEPS)$(C++_DEPS)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(CPP_DEPS)$(C_DEPS) ../lib/kmc_python.dylib
 	-@echo ' '
 
 .PHONY: all clean dependents

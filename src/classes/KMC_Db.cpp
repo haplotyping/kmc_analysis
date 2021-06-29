@@ -2,10 +2,8 @@
 
 KMC_Db::KMC_Db(const std::string &file_name) :
 		file_base(file_name) {
-
 	if (!initialize()) {
 		std::cerr << "couldn't initialize!" << std::endl;
-		exit(1);
 	}
 
 }
@@ -14,6 +12,9 @@ bool KMC_Db::initialize() {
 
 	char marker[4];
 	size_t result;
+
+	//change only after succesfull initialisation
+	initialised = false;
 
 	//define filenames
 	file_name_pre = file_base + file_name_pre_suffix;
@@ -148,14 +149,17 @@ bool KMC_Db::initialize() {
 		if (check_signature_map_size != signature_map_size) {
 			return false;
 		} else {
+			initialised = true;
 			return true;
 		}
 	} else {
+		initialised = true;
 		return true;
 	}
 }
 
 void KMC_Db::info() {
+	if(!initialised) {return;}
 	std::cout << "Files" << std::endl;
 	std::cout << "- prefix:" << file_name_pre << " (" << size_pre << " bytes)"
 			<< std::endl;
@@ -209,6 +213,7 @@ void KMC_Db::info() {
 }
 
 void KMC_Db::dump(std::string output_file_name, uint32 min, uint32 max, bool rc) {
+	if(!initialised) {return;}
 	std::ofstream output_file(output_file_name);
 	//create dump
 	uint64 prefix_array_size = (1 << 2 * prefix_length);
@@ -281,6 +286,7 @@ void KMC_Db::dump(std::string output_file_name, uint32 min, uint32 max, bool rc)
 }
 
 void KMC_Db::search(std::vector<Kmer> kmers) {
+	if(!initialised) {return;}
 	std::map<Kmer, uint32> result;
 	search(kmers, result);
 	//print them
@@ -295,12 +301,14 @@ void KMC_Db::search(std::vector<Kmer> kmers) {
 }
 
 void KMC_Db::search(std::set<Kmer> kmers, std::map<Kmer, uint32> &result) {
+	if(!initialised) {return;}
 	std::vector<Kmer> vkmers(kmers.size());
 	std::copy(kmers.begin(), kmers.end(), vkmers.begin());
 	search(vkmers, result);
 }
 
 void KMC_Db::search(std::vector<Kmer> kmers, std::map<Kmer, uint32> &result) {
+	if(!initialised) {return;}
 	if (kmers.size() > 0) {
 		//find signatures
 		std::set<uint32> signatures;
@@ -335,6 +343,7 @@ void KMC_Db::search(std::vector<Kmer> kmers, std::map<Kmer, uint32> &result) {
 }
 
 void KMC_Db::search(Kmer kmer, std::map<Kmer, uint32> &result) {
+	if(!initialised) {return;}
 	uint32 map_prefix_position;
 	std::vector<Kmer> signature_kmers;
 	//get prefixes location from signature map
@@ -349,6 +358,7 @@ void KMC_Db::search(Kmer kmer, std::map<Kmer, uint32> &result) {
 void KMC_Db::search_prefixes(std::vector<Kmer> kmers,
 		const uint32 map_prefix_position, std::map<Kmer, uint32> &result) {
 	//get prefixes
+	if(!initialised) {return;}
 	std::set<uint32> prefixes;
 	std::vector<Kmer>::iterator it;
 	for (it = kmers.begin(); it != kmers.end(); it++) {
@@ -383,6 +393,7 @@ void KMC_Db::search_suffixes(const uint32 prefix, std::vector<Kmer> kmers,
 		const uint64 map_suffixes_position_start,
 		const uint64 map_suffixes_position_end,
 		std::map<Kmer, uint32> &result) {
+	if(!initialised) {return;}
 	//sort by suffixes
 	sort(kmers.begin(), kmers.end());
 	//search them
