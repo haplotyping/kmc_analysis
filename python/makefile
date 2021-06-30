@@ -56,13 +56,13 @@ all: ../lib/kmc_python.so
 ../lib/kmc_python.so: $(OBJS) $(USER_OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MacOS X C++ Linker'
-	g++ -dynamiclib -o "../lib/kmc_python.so" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -shared -o "../lib/kmc_python.so" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(LIBRARIES)$(CC_DEPS)$(C++_DEPS)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(CPP_DEPS)$(C_DEPS) ../lib/kmc_python.so
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(CPP_DEPS)$(C_DEPS) ../lib/kmc_python.so
 	-@echo ' '
 
 .PHONY: all clean dependents

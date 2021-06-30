@@ -2,10 +2,6 @@
 
 extern "C" {
 
-	int main(int argc, char** argv) {
-		return 0;
-	}
-
 	bool status(const char *location, uint64_t *status) {
 		KMC_Db *kmc_db = new KMC_Db(location);
 		if (kmc_db->initialised) {
