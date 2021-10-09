@@ -26,8 +26,10 @@ extern "C" {
 			status[18] = kmc_db->suffix_record_size;
 			status[19] = kmc_db->suffixes_position;
 			status[20] = kmc_db->suffixes_size;
+			delete kmc_db;
 			return true;
 		}
+		delete kmc_db;
 		return false;
 	}
 
@@ -93,8 +95,10 @@ extern "C" {
 					}
 				}
 			}
+			delete kmc_db;
 			return true;
 		}
+		delete kmc_db;
 		return false;
 	}
 
@@ -171,8 +175,10 @@ extern "C" {
 				}
 			}
 			myfile.close();
+			delete kmc_db;
 			return true;
 		}
+		delete kmc_db;
 		return false;
 	}
 }
