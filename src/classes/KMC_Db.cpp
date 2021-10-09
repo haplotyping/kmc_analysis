@@ -8,6 +8,13 @@ KMC_Db::KMC_Db(const std::string &file_name) :
 
 }
 
+KMC_Db::~KMC_Db() {
+	fclose(file_pre);
+	file_pre = NULL;
+	fclose(file_suf);
+	file_suf = NULL;
+}
+
 bool KMC_Db::initialize() {
 
 	char marker[4];

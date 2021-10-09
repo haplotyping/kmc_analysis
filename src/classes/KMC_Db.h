@@ -61,6 +61,7 @@ public:
 	KMC_Kmer kmc_kmer;
 
 	KMC_Db(const std::string &file_name);
+	~KMC_Db();
 
 	void info();
 	void dump(std::string output_file_name, uint32 min, uint32 max, bool rc);
