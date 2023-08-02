@@ -11,6 +11,7 @@ private:
 
 	FILE *file_pre;
 	FILE *file_suf;
+	FILE *file_suf_chunk;
 
 	const char* marker_pre = "KMCP";
 	const char* marker_suf = "KMCS";

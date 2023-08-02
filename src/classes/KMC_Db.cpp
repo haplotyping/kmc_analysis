@@ -251,11 +251,20 @@ void KMC_Db::dump(std::string output_file_name, uint32 min, uint32 max, bool rc)
 				fseek(file_suf, suffixes_position + (pos_suf * (step_size)),
 				SEEK_SET);
 				uint64 position = pos_suf;
-
+				//read chunk
+				uint64 mem_size = (pos_suf_next-pos_suf)*(suffix_size+suffix_counter_size);
+				uchar mem_block[mem_size];
+				fread(&mem_block, sizeof(uchar), mem_size, file_suf);
+				//create stream
+				if ((file_suf_chunk = fmemopen(mem_block, mem_size, "rb")) == NULL) {
+					std::cerr << "Couldn't open chunk stream " << std::endl;
+					return;
+				}
+				//process chunk
 				while (position < pos_suf_next) {
 					number = 0;
-					fread(&suffix_value, sizeof(uchar), suffix_size, file_suf);
-					fread(&number, suffix_counter_size, 1, file_suf);
+					fread(&suffix_value, sizeof(uchar), suffix_size, file_suf_chunk);
+					fread(&number, suffix_counter_size, 1, file_suf_chunk);
 					if ((!min || number >= min) && (!max || number <= max)) {
 						if (kmc_version == 0x200) {
 							dump_write(output_file, kmc_kmer.prefix2string(prefix_value, false),
@@ -284,9 +293,8 @@ void KMC_Db::dump(std::string output_file_name, uint32 min, uint32 max, bool rc)
 }
 
 void KMC_Db::dump_write(std::ofstream& output_file, std::string prefix, std::string suffix, uint32 number) {
-	output_file << prefix;
-	output_file << suffix;
-	output_file << "\t" << number << std::endl;
+	std::string line = prefix + suffix + "\t" + std::to_string(number) = "\n";
+	output_file << line;
 }
 
 void KMC_Db::search(std::vector<Kmer> kmers) {
