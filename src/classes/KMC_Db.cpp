@@ -253,7 +253,7 @@ void KMC_Db::dump(std::string output_file_name, uint32 min, uint32 max, bool rc)
 				uint64 position = pos_suf;
 
 				//read chunk
-				uint64 mem_size = (pos_suf_next-pos_suf)*(sizeof(uchar)+suffix_counter_size);
+				uint64 mem_size = (pos_suf_next-pos_suf)*(suffix_size+suffix_counter_size);
 				uchar mem_block[mem_size];
 				fread(&mem_block, sizeof(uchar), mem_size, file_suf);
 				//create stream
