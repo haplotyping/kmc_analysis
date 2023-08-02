@@ -11,7 +11,6 @@ private:
 
 	FILE *file_pre;
 	FILE *file_suf;
-	FILE *file_suf_chunk;
 
 	const char* marker_pre = "KMCP";
 	const char* marker_suf = "KMCS";
@@ -19,6 +18,7 @@ private:
 	const char* file_name_suf_suffix = ".kmc_suf";
 
 	bool initialize();
+	void dump_write(std::ofstream& output_file, std::string prefix, std::string suffix, uint32 number);
 	void search_prefixes(std::vector<Kmer> kmers, const uint32 map_prefix_position,
 			std::map<Kmer, uint32> &result);
 	void search_suffixes(const uint32 prefix, std::vector<Kmer> kmers,
