@@ -293,7 +293,7 @@ void KMC_Db::dump(std::string output_file_name, uint32 min, uint32 max, bool rc)
 }
 
 void KMC_Db::dump_write(std::ofstream& output_file, std::string prefix, std::string suffix, uint32 number) {
-	std::string line = prefix + suffix + "\t" + std::to_string(number) = "\n";
+	std::string line = prefix + suffix + "\t" + std::to_string(number) + "\n";
 	output_file << line;
 }
 
